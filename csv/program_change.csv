@@ -1,0 +1,129 @@
+﻿Hexadecimal_value,Decimal_value,Program_change
+0x00,0,Acoustic grand piano
+0x01,1,Bright acoustic piano
+0x02,2,Electric grand piano
+0x03,3,Honky tonk piano
+0x04,4,Electric piano 1
+0x05,5,Electric piano 2
+0x06,6,Harpsicord
+0x07,7,Clavinet
+0x08,8,Celesta
+0x09,9,Glockenspiel
+0x0A,10,Music box
+0x0B,11,Vibraphone
+0x0C,12,Marimba
+0x0D,13,Xylophone
+0x0E,14,Tubular bell
+0x0F,15,Dulcimer
+0x10,16,Hammond drawbar organ
+0x11,17,Percussive organ
+0x12,18,Rock organ
+0x13,19,Church organ
+0x14,20,Reed organ
+0x15,21,Accordion
+0x16,22,Harmonica
+0x17,23,Tango accordion
+0x18,24,Nylon string acoustic guitar
+0x19,25,Steel string acoustic guitar
+0x1A,26,Jazz electric guitar
+0x1B,27,Clean electric guitar
+0x1C,28,Muted electric guitar
+0x1D,29,Overdriven guitar
+0x1E,30,Distortion guitar
+0x1F,31,Guitar harmonics
+0x20,32,Acoustic bass
+0x21,33,Fingered electric bass
+0x22,34,Picked electric bass
+0x23,35,Fretless bass
+0x24,36,Slap bass 1
+0x25,37,Slap bass 2
+0x26,38,Synth bass 1
+0x27,39,Synth bass 2
+0x28,40,Violin
+0x29,41,Viola
+0x2A,42,Cello
+0x2B,43,Contrabass
+0x2C,44,Tremolo strings
+0x2D,45,Pizzicato strings
+0x2E,46,Orchestral strings harp
+0x2F,47,Timpani
+0x30,48,String ensemble 1
+0x31,49,String ensemble 2 slow strings
+0x32,50,Synth strings 1
+0x33,51,Synth strings 2
+0x34,52,Choir aahs
+0x35,53,Voice oohs
+0x36,54,Synth choir voice
+0x37,55,Orchestra hit
+0x38,56,Trumpet
+0x39,57,Trombone
+0x3A,58,Tuba
+0x3B,59,Muted trumpet
+0x3C,60,French horn
+0x3D,61,Brass ensemble
+0x3E,62,Synth brass 1
+0x3F,63,Synth brass 2
+0x40,64,Soprano sax
+0x41,65,Alto sax
+0x42,66,Tenor sax
+0x43,67,Baritone sax
+0x44,68,Oboe
+0x45,69,English horn
+0x46,70,Bassoon
+0x47,71,Clarinet
+0x48,72,Piccolo
+0x49,73,Flute
+0x4A,74,Recorder
+0x4B,75,Pan flute
+0x4C,76,Bottle blow blown bottle
+0x4D,77,Shakuhachi
+0x4E,78,Whistle
+0x4F,79,Ocarina
+0x50,80,Synth square wave
+0x51,81,Synth saw wave
+0x52,82,Synth calliope
+0x53,83,Synth chiff
+0x54,84,Synth charang
+0x55,85,Synth voice
+0x56,86,Synth fifths saw
+0x57,87,Synth brass and lead
+0x58,88,Fantasia new age
+0x59,89,Warm pad
+0x5A,90,Polysynth
+0x5B,91,Space vox choir
+0x5C,92,Bowed glass
+0x5D,93,Metal pad
+0x5E,94,Halo pad
+0x5F,95,Sweep pad
+0x60,96,Ice rain
+0x61,97,Soundtrack
+0x62,98,Crystal
+0x63,99,Atmosphere
+0x64,100,Brightness
+0x65,101,Goblins
+0x66,102,Echo drops echoes
+0x67,103,Sci fi
+0x68,104,Sitar
+0x69,105,Banjo
+0x6A,106,Shamisen
+0x6B,107,Koto
+0x6C,108,Kalimba
+0x6D,109,Bag pipe
+0x6E,110,Fiddle
+0x6F,111,Shanai
+0x70,112,Tinkle bell
+0x71,113,Agogo
+0x72,114,Steel drums
+0x73,115,Woodblock
+0x74,116,Taiko drum
+0x75,117,Melodic tom
+0x76,118,Synth drum
+0x77,119,Reverse cymbal
+0x78,120,Guitar fret noise
+0x79,121,Breath noise
+0x7A,122,Seashore
+0x7B,123,Bird tweet
+0x7C,124,Telephone ring
+0x7D,125,Helicopter
+0x7E,126,Applause
+0x7F,127,Gunshot
