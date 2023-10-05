@@ -21,8 +21,7 @@ Convert type 0 midi files to type 1 midi files
 
 """
 
-
-class preprocess():
+class Preprocess():
     def __init__(self, root_dir):
         self.root_dir = root_dir
         self.path_list = self.get_path_list(self.root_dir)
@@ -161,7 +160,7 @@ if __name__ == '__main__':
 
     folder_path = args.folder_path
 
-    p = preprocess(folder_path)
+    p = Preprocess(folder_path)
     p.start()
 
 

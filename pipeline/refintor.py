@@ -1,4 +1,3 @@
-import mido
 import os
 import numpy as np
 from utils.utils import get_file_name
