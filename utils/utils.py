@@ -1,7 +1,12 @@
 from music21 import converter, instrument
 import pretty_midi
-
 import re
+
+def only_float(number):
+    a = float(number)
+    b = int(a)
+    c = a - b
+    return float("%.2f" % c)
 
 def get_file_name(path):
     return path.split('/')[-1].split('.')[0]

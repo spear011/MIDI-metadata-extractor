@@ -7,7 +7,7 @@ This tool allows you to break down a multi-track MIDI file into individual instr
 
 The ComMU dataset is a collection of short, single-instrumental MIDI sequences of 4-16 bars, each enriched with 12 metadata fields.
 
-- [Paper](https://arxiv.org/pdf/2211.09385.pdf) [Demo Page](https://pozalabs.github.io/ComMU/) [Dataset](https://github.com/POZAlabs/ComMU-code/tree/master/dataset)
+- [[Paper]](https://arxiv.org/pdf/2211.09385.pdf) [[Demo Page]](https://pozalabs.github.io/ComMU/) [[Dataset]](https://github.com/POZAlabs/ComMU-code/tree/master/dataset)
 
 ## Table of Contents
 

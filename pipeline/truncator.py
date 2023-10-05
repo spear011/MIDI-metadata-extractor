@@ -1,4 +1,4 @@
-from music21 import converter, instrument, meter, tempo, pitch, key, interval, note, chord
+from music21 import converter, instrument, meter, tempo, pitch, key, interval, note, chord, offset
 import os
 import pandas as pd
 import glob
@@ -6,20 +6,35 @@ import numpy as np
 
 import time
 
-from utils.utils import open_midi, get_file_name, extract_tempo, extract_key, to_snake_case, get_tempo
+from utils.utils import open_midi, get_file_name, extract_tempo, extract_key, to_snake_case, get_tempo, only_float
 from tqdm import tqdm
+
+from difflib import get_close_matches
 
 class Truncator:
     """
     Read MIDI files and extract information.
     """
 
-    def __init__(self, midi_path, num_bars, output_folder, p_df):
+    def __init__(self, midi_path, num_bars, output_folder):
         self.midi_path = midi_path
         self.num_bars  = num_bars
         self.output_folder = output_folder
-        self.p_df = p_df
+        self.p_df = pd.read_csv(r'csv/program_change.csv')
+        self.chord_df = pd.read_csv(r'csv/chord_list.csv')
+        self.chord_list = self.get_chord_list(self.chord_df)
         self.bpm_list = [35,45,50,60,65,70,75,80,85,90,95,100,105,110,120,125,130,135,140,145,150,155]
+
+    def get_chord_list(self, chord_df):
+        cl = chord_df['NOTES'].to_list()
+
+        for idx, v in enumerate(cl):
+            cl[idx] = v.replace(',', '')
+
+        for idx, v in enumerate(cl):
+            cl[idx] = v.replace('b', '-')
+        return cl
+
 
     def find_near_bpm(self, bpm_value):
         bpm_list = self.bpm_list
@@ -92,9 +107,117 @@ class Truncator:
             elif current_value in very_low:
                 df.loc[idx, 'pitch_range'] = 'very_low'
         return df
+    
 
+    def is_triplet_rhythm(self, durations):
+        """
+        Detects triplet rhythms in a list of note durations.
+        
+        Args:
+            durations (list of floats): List of note durations in beats.
+            
+        Returns:
+            bool: True if triplet rhythms are detected, False otherwise.
+        """
+        triplet_duration = [only_float(1/3), only_float(2/3)]  # The duration of a single triplet eighth note
+        
+        # Initialize variables to keep track of triplet counts and non-triplet counts
+        triplet_count = 0
+        non_triplet_count = 0
+        
+        for duration in durations:
+            # Check if the duration is approximately equal to a triplet eighth note
+            if duration in triplet_duration:
+                triplet_count += 1
+            else:
+                non_triplet_count += 1
 
-    def truncate_midi_by_bars(self, crop_mode='by_bars'):
+        if triplet_count > non_triplet_count:
+            return 'triplet'
+        else:
+            return 'standard'
+        
+    def extract_chord_expression(self, score):
+
+        chord_progression = list()
+        cp = list()
+
+        cl = self.chord_list
+        chord_df = self.chord_df
+
+        length = score.recurse().getElementsByClass('Measure')[-1].number
+
+        for i in range(length):
+    
+            note_list = list()
+
+            for obj in score.measures(i+1, i+1).recurse():
+                if isinstance(obj, note.Note):
+                    if obj.duration.quarterLength > 0:
+                        note_list.append(obj.name)  
+                elif isinstance(obj, chord.Chord):
+                    for p in obj.pitches:   
+                        note_list.append(p.name) 
+
+            current_chord = list()
+
+            for value in note_list:
+                if value not in current_chord:
+                    current_chord.append(value)
+
+            if len(current_chord) == 0:
+                cp.append('Bar_None')
+
+            if len(current_chord) == 1:
+                cp.append(str(current_chord[0]))
+
+            if len(current_chord) > 1:
+
+                notes = str()
+                
+                for i in current_chord:
+                    notes += i
+                
+                if len(notes) > 5:
+                    notes = notes[:5]
+                
+                close_matches = get_close_matches(notes, cl , 1, 0.6)
+            
+                if not close_matches:
+                    close_matches = get_close_matches(notes, cl , 1, 0.5)
+                
+                if not close_matches:
+                    close_matches = get_close_matches(notes, cl , 1, 0.4)
+
+                tnl = list()
+                for i in range(len(str(close_matches[0]))):
+                    if close_matches[0][i] == '#':
+                        tnl.append(close_matches[0][i-1] + '#')
+                        tnl.remove(close_matches[0][i-1])
+                    elif close_matches[0][i] == '-':
+                        tnl.append(close_matches[0][i-1] + 'b')
+                        tnl.remove(close_matches[0][i-1])
+                    else:
+                        tnl.append(close_matches[0][i])
+
+                basic = chord_df[chord_df['Notes_list_string'] == str (tnl)]['CHORD_ROOT'].values[0]
+                chord_type = chord_df[chord_df['Notes_list_string'] == str(tnl)]['CHORD_TYPE'].values[0]
+                if chord_type == '5':
+                    chord_type = ''
+                if chord_type == 'm5':
+                    chord_type = 'm'
+                cp.append(str(basic + chord_type))
+
+        if set(cp) == {'Bar_None'}:
+            return ['Bar_None']
+                    
+        for c in cp:
+            for i in range(8):
+                chord_progression.append(c)
+        
+        return chord_progression
+
+    def truncate_midi(self, crop_mode='by_bars'):
 
         error_df = pd.DataFrame(columns=['midi_path', 'error_msg'])
 
@@ -171,7 +294,7 @@ class Truncator:
 
         df = pd.DataFrame(columns=['song_midi', 'file_name', 'program_change_value' ,'program_change_msg', 
                                    'start_position', 'end_position', 'num_bars', 'tempo', 'key', 'min_pitch', 'max_pitch', 'mean_pitch',
-                                   'min_velocity', 'max_velocity', 'time_signature'])
+                                   'min_velocity', 'max_velocity', 'time_signature', 'sample_rhythm', 'chord_progressions'])
 
         cropped_scores = []
         instrument_names = []
@@ -189,6 +312,8 @@ class Truncator:
         min_velocities = []
         max_velocities = []
         time_signatures = []
+        sample_rhythms = []
+        chord_progressions = []
 
         saved_count = 0
         no_notes_count = 0
@@ -232,6 +357,7 @@ class Truncator:
 
                         midi_numbers = list()
                         velocities = list()
+                        duration_list = list()
 
                         for obj in cropped_part.recurse():
                             if isinstance(obj, note.Note):
@@ -244,6 +370,11 @@ class Truncator:
                                 for p in obj.pitches:
                                     midi_numbers.append(p.midi)
                                     velocities.append(obj.volume.velocity)
+                            elif isinstance(obj, offset.Offset):
+                                if float(obj.offset) > 0:
+                                    duration_list.append(only_float(float(obj.offset)))
+                        
+                        chords = self.extract_chord_expression(cropped_part)
 
                         if len(midi_numbers) == 0:
                             no_notes_count += 1
@@ -263,6 +394,8 @@ class Truncator:
                             mean_pitches.append((sum(midi_numbers) / len(midi_numbers)))
                             min_velocities.append(min(velocities))
                             max_velocities.append(max(velocities))
+                            sample_rhythms.append(self.is_triplet_rhythm(duration_list))
+                            chord_progressions.append([chords])
                             
                             if song_key == 'c_major':
                                 cropped_part.insert(0, c_maj)
@@ -283,6 +416,7 @@ class Truncator:
 
                     midi_numbers = list()
                     velocities = list()
+                    duration_list = list()
 
                     for obj in part.recurse():
                         if isinstance(obj, note.Note):
@@ -295,6 +429,11 @@ class Truncator:
                             for p in obj.pitches:
                                 midi_numbers.append(p.midi)
                                 velocities.append(obj.volume.velocity)
+                        elif isinstance(obj, offset.Offset):
+                            if float(obj.offset) > 0:
+                                duration_list.append(only_float(float(obj.offset)))
+                    
+                    chords = self.extract_chord_expression(part)
                     
                     if len(midi_numbers) == 0:
                         no_notes_count += 1
@@ -314,6 +453,8 @@ class Truncator:
                         mean_pitches.append((sum(midi_numbers) / len(midi_numbers)))
                         min_velocities.append(min(velocities))
                         max_velocities.append(max(velocities))
+                        sample_rhythms.append(self.is_triplet_rhythm(duration_list))
+                        chord_progressions.append([chords])
 
                         if song_key == 'c_major':
                             part.insert(0, c_maj)
@@ -343,6 +484,9 @@ class Truncator:
         df['mean_pitch'] = mean_pitches
         df['min_velocity'] = min_velocities
         df['max_velocity'] = max_velocities
+
+        df['sample_rhythm'] = sample_rhythms
+        df['chord_progressions'] = chord_progressions
 
         df.sort_values(by=['instrument_name', 'start_position'], inplace=True)
         df.reset_index(drop=True, inplace=True)

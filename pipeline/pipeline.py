@@ -22,7 +22,6 @@ class Pipeline:
         self.num_bars = num_bars
         self.file_path = glob.glob(f'{self.data_folder}/*.mid')
         self.output_folder = output_folder
-        self.p_df = pd.read_csv(r'csv/program_change.csv')
         self.genre = genre
         self.crop_mode = crop_mode
     
@@ -37,15 +36,13 @@ class Pipeline:
 
         error = 0
 
-        df = pd.DataFrame(columns=['song_midi', 'file_name', 'program_change_value' ,'program_change_msg', 
-                                   'start_position', 'end_position', 'num_bars', 'tempo', 'key', 'min_pitch', 'max_pitch', 'mean_pitch',
-                                   'min_velocity', 'max_velocity', 'time_signature'])
+        df = pd.DataFrame()
         
         error_df = pd.DataFrame(columns=['midi_path', 'error_msg'])
 
         for idx, path in tqdm(enumerate(file_path)):
             
-            current_df, df_type_msg = Truncator(path, num_bars, output_folder, p_df).truncate_midi_by_bars(crop_mode=crop_mode)
+            current_df, df_type_msg = Truncator(path, num_bars, output_folder).truncate_midi_by_bars(crop_mode=crop_mode)
 
             if current_df is None:
                 error += 1
