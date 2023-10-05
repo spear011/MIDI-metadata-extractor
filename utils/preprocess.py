@@ -7,11 +7,19 @@ from tempo_modification import Modify
 from key_transpose import Transpose
 from tqdm import tqdm
 from utils import to_snake_case
+import argparse
 
 
 # ignore warnings
 import warnings
 warnings.filterwarnings("ignore")
+
+"""
+Checking validity of midi files
+
+Convert type 0 midi files to type 1 midi files
+
+"""
 
 
 class preprocess():
@@ -141,8 +149,18 @@ class preprocess():
         # modifying_tempo.tempo_modification_start()
 
 
+
+
 if __name__ == '__main__':
-    folder_path = r'/Users/hai/Desktop/hch/projects/midi/test_data/retry/movie'
+
+    parser = argparse.ArgumentParser(description='preprocess midi files')
+
+    parser.add_argument('--folder_path', type=str, help='folder path of midi files')
+
+    args = parser.parse_args()
+
+    folder_path = args.folder_path
+
     p = preprocess(folder_path)
     p.start()
 

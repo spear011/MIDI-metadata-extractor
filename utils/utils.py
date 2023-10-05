@@ -82,8 +82,6 @@ def to_snake_case(text):
     text = text.lower().replace(" ", "_")
     text_rmv = re.sub(r'[-=+,#/\?:&^.@*"※$%~ㆍ!』‘|\(\)\[\]`\'…》\”\“\’·<>]','', text)
     text_rmv = re.sub(r'\xa0', '_', text_rmv)
-    text_rmv = text_rmv.replace('__', '_')
-    text_rmv = text_rmv.replace('__', '_')
     return text_rmv
 
 
