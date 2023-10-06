@@ -72,8 +72,8 @@ After successful preprocessing, project tree would be like this,
 
 ## 2. Truncate and Metadata Extraction
 
-- **num_bars (optional):** Number of bars to truncate the tracks. If not provided, it defaults to 8 bars.
 - **crop_mode:** Choose between 'by_inst' or 'by_bars' cropping modes.
+- **num_bars (optional):** Number of bars to truncate the tracks. If not provided, it defaults to 8 bars.
 
 ```bash
 python pipeline.py --data_folder example --crop_mode by_bars --num_bars 8 
@@ -113,7 +113,7 @@ After successful preprocessing, project tree would be like this,
                 └── ...
 ```
 # Results
-- **midi files:** MIDI files divided by instrument according to the crop mode you specify, or divided by instrument and then truncated to a specified number of measures.
+- **MIDI Files:** MIDI files divided by instrument according to the crop mode you specify, or divided by instrument and then truncated to a specified number of measures.
 - **results.csv:** Contains all 12 pieces of metadata provided by ComMU, including the program message number assigned to each instrument and the name of the instrument it corresponds to, as well as the midi file title of the original song and the location where each sequence was placed.
   - song_midi
   - file_name
@@ -132,4 +132,5 @@ After successful preprocessing, project tree would be like this,
 # Citation
 
 [1] LEE, Hyun, et al. ComMU: Dataset for Combinatorial Music Generation. Advances in Neural Information Processing Systems, 2022, 35: 39103-39114.
+
 [2] Facoetti, G. Chords Structure and note names, 2020, https://data.world/gianca1976/chords-structure-and-note-names
