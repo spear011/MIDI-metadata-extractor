@@ -16,6 +16,9 @@ The ComMU dataset is a collection of short, single-instrumental MIDI sequences o
   - [Table of Contents](#table-of-contents)
 - [Features](#features)
 - [Installation](#installation)
+- [Usage](#usage)
+  - [1. Preprocess](#1-preprocess)
+  - [2. Truncate and Metadata Extraction](#2-truncate-and-metadata-extraction)
 
 # Features
 
@@ -35,4 +38,49 @@ git clone https://github.com/your-username/midi-metadata-extractor.git
 
 # Change directory
 cd midi-metadata-extractor
+
+# Install Python requirements
+pip install -r requirements.txt
 ```
+
+# Usage
+
+## 1. Preprocess
+
+Check the validity of MIDI files, convert type 0 MIDI files to type 1 MIDI files.
+
+```bash
+python preprocess.py --data_folder example
+```
+
+After successful preprocessing, project tree would be like this, 
+
+```
+    .
+    └── example
+        ├── raw
+            ├── example.mid
+        ├── processed
+            └── example.mid
+```
+
+## 2. Truncate and Metadata Extraction
+
+- **num_bars (optional):** Number of bars to truncate the tracks. If not provided, it defaults to 8 bars.
+- **crop_mode:** Choose between 'by_inst' or 'by_bars' cropping modes.
+
+```bash
+python pipeline.py --data_folder example --crop_mode by_bars --num_bars 8 
+```
+
+After successful preprocessing, project tree would be like this, 
+
+```
+    .
+    └── example
+        ├── raw
+            ├── example.mid
+        ├── processed
+            └── example.mid
+```
+
