@@ -236,7 +236,7 @@ class Truncator:
             
         except:
             print(f'Error: {self.midi_path}')
-            error_df = error_df.append({'midi_path': self.midi_path, 'error_msg': 'open'}, ignore_index=True)
+            error_df = error_df.append({'midi_path': self.midi_path, 'error_msg': 'Open'}, ignore_index=True)
             df_type_msg = 'error'
             return error_df, df_type_msg
 

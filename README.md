@@ -1,6 +1,6 @@
 # MIDI-metadata-extractor
 
-MIDI-metadata-extractor is a powerful utility that enables you to transform any multi-track MIDI file into the format of a ComMU dataset. 
+MIDI-metadata-extractor is a powerful utility that enables you to transform any multi-track MIDI file into the format of a ComMU dataset [1]. 
 This tool allows you to break down a multi-track MIDI file into individual instrument tracks, extract detailed metadata for each track, and provides the flexibility to truncate and save tracks based on a specified number of measures (e.g., 8 measures).
 
 ## What is ComMU Dataset?
@@ -19,6 +19,8 @@ The ComMU dataset is a collection of short, single-instrumental MIDI sequences o
 - [Usage](#usage)
   - [1. Preprocess](#1-preprocess)
   - [2. Truncate and Metadata Extraction](#2-truncate-and-metadata-extraction)
+- [Results](#results)
+- [Citation](#citation)
 
 # Features
 
@@ -59,9 +61,13 @@ After successful preprocessing, project tree would be like this,
     .
     └── example
         ├── raw
-            ├── example.mid
+            ├── song01.mid
+            ├── song02.mid
+            ├── song03.mid
         ├── processed
-            └── example.mid
+            ├── song01.mid
+            ├── song02.mid
+            └── song03.mid
 ```
 
 ## 2. Truncate and Metadata Extraction
@@ -78,9 +84,52 @@ After successful preprocessing, project tree would be like this,
 ```
     .
     └── example
+        ├── results.csv
+        ├── error_files.csv
         ├── raw
-            ├── example.mid
+            ├── song01.mid
+            ├── song02.mid
+            ├── song03.mid
         ├── processed
-            └── example.mid
+            ├── song01.mid
+            ├── song02.mid
+            └── song03.mid
+        ├── by_bars
+            ├── song01
+                ├── 01_acoustic_bass_00.mid
+                ├── 01_acoustic_bass_01.mid
+                ├── 01_acoustic_bass_02.mid
+                ├── 02_string_00.mid
+                ├── 02_string_01.mid
+                ├── 02_string_02.mid
+                ├── ...
+            ├── song02
+                ├── 01_violin_00.mid
+                ├── 01_violin_01.mid
+                ├── 02_contrabass_00.mid
+                ├── 02_contrabass_01.mid
+                ├── ...
+            ├── song03
+                └── ...
 ```
+# Results
+- **midi files:** MIDI files divided by instrument according to the crop mode you specify, or divided by instrument and then truncated to a specified number of measures.
+- **results.csv:** Contains all 12 pieces of metadata provided by ComMU, including the program message number assigned to each instrument and the name of the instrument it corresponds to, as well as the midi file title of the original song and the location where each sequence was placed.
+  - song_midi
+  - file_name
+  - program_change_value, program_change_msg
+  - start_position, end_position, num_bars
+  - tempo
+  - key
+  - min_pitch, max_pitch, mean_pitch, pitch_range
+  - min_velocity, max_velocity
+  - time_signature
+  - sample_rhythm
+  - chord_progressions
+  - instrument_name
+- **error_files.csv:** The name of the error file and the corresponding message. ('open' for unable to open and 'parts' for unable to divide because there is only one instrument in the midi).
 
+# Citation
+
+[1] LEE, Hyun, et al. ComMU: Dataset for Combinatorial Music Generation. Advances in Neural Information Processing Systems, 2022, 35: 39103-39114.
+[2] Facoetti, G. Chords Structure and note names, 2020, https://data.world/gianca1976/chords-structure-and-note-names
