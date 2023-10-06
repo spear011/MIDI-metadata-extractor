@@ -20,7 +20,7 @@ The ComMU dataset is a collection of short, single-instrumental MIDI sequences o
   - [1. Preprocess](#1-preprocess)
   - [2. Truncate and Metadata Extraction](#2-truncate-and-metadata-extraction)
 - [Results](#results)
-- [Citation](#citation)
+- [Reference](#reference)
 
 # Features
 
@@ -129,7 +129,7 @@ After successful preprocessing, project tree would be like this,
   - instrument_name
 - **error_files.csv:** The name of the error file and the corresponding message. ('open' for unable to open and 'parts' for unable to divide because there is only one instrument in the midi).
 
-# Citation
+# Reference
 
 [1] LEE, Hyun, et al. ComMU: Dataset for Combinatorial Music Generation. Advances in Neural Information Processing Systems, 2022, 35: 39103-39114.
 
